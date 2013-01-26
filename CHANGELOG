@@ -1,0 +1,1 @@
+* Selection improvement: selection now accepts the underlying content rather then the TableRow object
