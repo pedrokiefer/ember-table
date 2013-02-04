@@ -3,7 +3,7 @@ Ember.Table.TablesContainer = Ember.View.extend Ember.ResizeHandler,
   classNames:   'tables-container'
   didInsertElement: ->
     @_super()
-    @elementSizeDidChange()
+    Ember.run.next this, @elementSizeDidChange
     # TODO(Peter): This is a hack to detect if user is using lion and scroll
     # bars are set to show when scrolling
     scrollBarWidth = $.getScrollbarWidth()
@@ -11,10 +11,11 @@ Ember.Table.TablesContainer = Ember.View.extend Ember.ResizeHandler,
     scrollBarWidth = 8 if isLion
     @set 'controller._scrollbarSize', scrollBarWidth
   onResize: ->
-    @elementSizeDidChange()
+    Ember.run.next this, @elementSizeDidChange
   elementSizeDidChange: ->
-    @set 'controller._width', @$().width()
-    @set 'controller._height', @$().height()
+    @get('controller').setProperties
+      _width:   @$().width()
+      _height:  @$().height()
 
 Ember.Table.TableContainer = Ember.View.extend Ember.StyleBindingsMixin,
   classNames:     ['table-container']

@@ -795,7 +795,7 @@ Ember.TEMPLATES["header-cell"]=Ember.Handlebars.compile("\n  <span {{action sort
     didInsertElement: function() {
       var isLion, scrollBarWidth;
       this._super();
-      this.elementSizeDidChange();
+      Ember.run.next(this, this.elementSizeDidChange);
       scrollBarWidth = $.getScrollbarWidth();
       isLion = (typeof navigator !== "undefined" && navigator !== null ? navigator.appVersion['10_7'] : void 0) !== -1 && scrollBarWidth === 0;
       if (isLion) {
@@ -804,11 +804,13 @@ Ember.TEMPLATES["header-cell"]=Ember.Handlebars.compile("\n  <span {{action sort
       return this.set('controller._scrollbarSize', scrollBarWidth);
     },
     onResize: function() {
-      return this.elementSizeDidChange();
+      return Ember.run.next(this, this.elementSizeDidChange);
     },
     elementSizeDidChange: function() {
-      this.set('controller._width', this.$().width());
-      return this.set('controller._height', this.$().height());
+      return this.get('controller').setProperties({
+        _width: this.$().width(),
+        _height: this.$().height()
+      });
     }
   });
 
