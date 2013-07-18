@@ -224,7 +224,7 @@ body {
   background-color: #ffffff;
 }
 /* Table Cell */
-.ember-table-table-cell {
+.ember-table-cell {
   float: left;
   font-size: 13px;
   border-right: 1px solid #dcdcdc;
@@ -233,28 +233,29 @@ body {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.ember-table-table-cell span {
+.ember-table-cell .ember-table-content,
+.ember-table-cell .ember-table-toggle-span {
   padding: 0;
   line-height: 29px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.ember-table-table-cell .ember-table-content {
+.ember-table-cell .ember-table-content {
   padding: 0 5px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.ember-table-body-container .ember-table-table-cell,
-.ember-table-footer-container .ember-table-table-cell {
+.ember-table-body-container .ember-table-cell,
+.ember-table-footer-container .ember-table-cell {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   height: 100%;
   border-right: 0;
 }
-.ember-table-left-table-block .ember-table-table-cell {
+.ember-table-left-table-block .ember-table-cell {
   border-right: 1px solid #dcdcdc !important;
 }
 /* Header Container */
@@ -387,14 +388,11 @@ body {
   overflow: hidden;
   z-index: 1;
 }
-.ember-table-footer-container .ember-table-table-cell .ember-table-toggle {
+.ember-table-footer-container .ember-table-cell .ember-table-toggle {
   display: none;
 }
 /* Toggle Cell */
 .ember-table-toggle-span {
-  position: absolute;
-  top: 0;
-  left: 0;
   display: block;
   width: 20px;
   height: 100%;
@@ -420,6 +418,9 @@ body {
 .ember-table-toggle .ember-table-toggle-icon:hover {
   opacity: 0.5;
 }
+.ember-table-toggle.ember-table-expand {
+  margin-top: -2px;
+}
 .ember-table-toggle.ember-table-expand .ember-table-toggle-icon {
   -webkit-transform: rotate(-90deg);
   -moz-transform: rotate(-90deg);
@@ -428,7 +429,6 @@ body {
   padding-left: 0;
   opacity: 1;
   padding-left: 3px;
-  padding-top: 3px;
 }
 /* Column Indicator */
 .ember-table-column-sortable-indicator {

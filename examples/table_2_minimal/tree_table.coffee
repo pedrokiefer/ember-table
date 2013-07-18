@@ -185,8 +185,9 @@ App.TreeTableExample.TreeTableRow = Ember.Table.Row.extend
 App.TreeTableExample.TreeCell = Ember.Table.TableCell.extend
   templateName: 'table-tree-cell'
   classNames:   'ember-table-table-tree-cell'
-  styleBindings: ['indentation:padding-left']
-  indentation:  Ember.computed.alias 'row.indentation'
+  paddingStyle: Ember.computed ->
+    "padding-left:#{@get('row.indentation')}px;"
+  .property 'row.indentation'
 
 App.TreeTableExample.HeaderTreeCell = Ember.Table.HeaderCell.extend
   templateName: 'table-header-tree-cell'

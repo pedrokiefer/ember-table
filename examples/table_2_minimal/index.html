@@ -19,42 +19,56 @@
 
     <script type="text/x-handlebars" data-template-name="application">
       <div class="presentation-container">
-	{{view Ember.Table.TablesContainer
-	  controllerBinding="tableController"
-	  selectionBinding="tableController.selection"
-	}}
+        {{view Ember.Table.TablesContainer
+          controllerBinding="tableController"
+          selectionBinding="tableController.selection"
+        }}
       </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="header-cell">
-      <div class="ember-table-header-content-container" {{action sortByColumn view.content}}>
-	<span class="ember-table-content">
-	  {{view.content.headerCellName}}
-	</span>
+      <div class="ember-table-cell-container">
+        <div class="ember-table-header-content-container" {{action sortByColumn view.content}}>
+          <span class="ember-table-content">
+            {{view.content.headerCellName}}
+          </span>
+        </div>
       </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="table-tree-cell">
-      <span {{bindAttr class=":ember-table-toggle-span view.row.isLeaf::ember-table-toggle
-	view.row.isCollapsed:ember-table-expand:ember-table-collapse"}}
-	{{action toggleCollapse view.row}}>
-	<i class="icon-caret-down ember-table-toggle-icon"></i>
-      </span>
-      <span class="ember-table-content">
-	{{view.cellContent}}
-      </span>
+      <div class="ember-table-cell-container" {{bindAttr style="view.paddingStyle"}}>
+        <span {{bindAttr class=":ember-table-toggle-span view.row.isLeaf::ember-table-toggle
+          view.row.isCollapsed:ember-table-expand:ember-table-collapse"}}
+          {{action toggleCollapse view.row}}>
+          <i class="icon-caret-down ember-table-toggle-icon"></i>
+        </span>
+        <span class="ember-table-content">
+          {{view.cellContent}}
+        </span>
+      </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="table-cell">
+      <div class="ember-table-cell-container">
+        <span class="ember-table-content">
+          {{view.cellContent}}
+        </span>
+      </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="table-header-tree-cell">
-      <span {{bindAttr class=":ember-table-toggle-span view.row.isLeaf::ember-table-toggle
-	view.row.isCollapsed:ember-table-expand:ember-table-collapse"}}
-	{{action toggleCollapse view.row}}>
-	<i class="icon-caret-down ember-table-toggle-icon"></i>
-      </span>
-      <div class="ember-table-header-content-container" {{action sortByColumn view.column}}>
-	<span class="ember-table-content">
-	  {{view.column.headerCellName}}
-	</span>
+      <div class="ember-table-cell-container">
+        <span {{bindAttr class=":ember-table-toggle-span view.row.isLeaf::ember-table-toggle
+          view.row.isCollapsed:ember-table-expand:ember-table-collapse"}}
+          {{action toggleCollapse view.row}}>
+          <i class="icon-caret-down ember-table-toggle-icon"></i>
+        </span>
+        <div class="ember-table-header-content-container" {{action sortByColumn view.column}}>
+          <span class="ember-table-content">
+            {{view.column.headerCellName}}
+          </span>
+        </div>
       </div>
     </script>
 

@@ -83,9 +83,8 @@ Ember.Table.TableRow = Ember.LazyItemView.extend
     row.set 'isActive', no if row
 
 Ember.Table.TableCell = Ember.View.extend Ember.StyleBindingsMixin,
-  defaultTemplate: Ember.Handlebars.compile(
-    "<span class='ember-table-content'>{{view.cellContent}}</span>")
-  classNames:         ['ember-table-table-cell']
+  templateName:       'table-cell'
+  classNames:         ['ember-table-cell']
   classNameBindings:  'column.textAlign'
   styleBindings:      'width'
   row:        Ember.computed.alias 'parentView.row'
@@ -187,7 +186,7 @@ Ember.Table.HeaderRow = Ember.View.extend Ember.ScrollHandlerMixin,
 
 Ember.Table.HeaderCell = Ember.View.extend Ember.StyleBindingsMixin,
   templateName:       'header-cell'
-  classNames:         ['ember-table-table-cell', 'ember-table-header-cell']
+  classNames:         ['ember-table-cell', 'ember-table-header-cell']
   classNameBindings:  ['column.isSortable:sortable', 'column.textAlign']
   styleBindings:      ['width', 'height']
   column:         Ember.computed.alias 'content'

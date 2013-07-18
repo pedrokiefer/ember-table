@@ -141,7 +141,7 @@
 
 /* Table Cell */
 
-.ember-table-table-cell {
+.ember-table-cell {
   float: left;
   // Important: We defined font-size: 0 in .tables-container due to the use of
   // display-inline: block. Font-size: 13px is used for the cell content
@@ -150,7 +150,8 @@
   height: 100%;
   .box-sizing();
 
-  span {
+  .ember-table-content,
+  .ember-table-toggle-span {
     padding: 0;
     // Note the -1 is because we use box sizing and the row has a bottom border
     line-height: @table-row-height - 1;
@@ -163,8 +164,8 @@
   }
 }
 
-.ember-table-body-container .ember-table-table-cell,
-.ember-table-footer-container .ember-table-table-cell {
+.ember-table-body-container .ember-table-cell,
+.ember-table-footer-container .ember-table-cell {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -172,7 +173,7 @@
   border-right: 0;
 }
 
-.ember-table-left-table-block .ember-table-table-cell {
+.ember-table-left-table-block .ember-table-cell {
   border-right: 1px solid @table-col-border-color !important;
 }
 
@@ -328,7 +329,7 @@
   overflow: hidden;
   z-index: 1;
 
-  .ember-table-table-cell .ember-table-toggle {
+  .ember-table-cell .ember-table-toggle {
     display: none;
   }
 }
@@ -336,9 +337,6 @@
 /* Toggle Cell */
 
 .ember-table-toggle-span {
-  position: absolute;
-  top: 0;
-  left: 0;
   display: block;
   width: 20px;
   height: 100%;
@@ -367,12 +365,15 @@
   }
 }
 
-.ember-table-toggle.ember-table-expand .ember-table-toggle-icon {
-  .transform(rotate(-90deg));
-  padding-left: 0;
-  opacity: 1;
-  padding-left: 3px;
-  padding-top: 3px;
+.ember-table-toggle.ember-table-expand{
+  margin-top: -2px;
+
+  .ember-table-toggle-icon {
+   .transform(rotate(-90deg));
+    padding-left: 0;
+    opacity: 1;
+    padding-left: 3px;
+  }
 }
 
 /* Column Indicator */
