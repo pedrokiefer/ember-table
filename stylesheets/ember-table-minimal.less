@@ -134,7 +134,7 @@
   float: left;
   // Important: We defined font-size: 0 in .tables-container due to the use of
   // display-inline: block. Font-size: 13px is used for the cell content
-  font-size: 13px;
+  font-size: 14px;
   // Use border left because of border-box
   border-right: 16px solid transparent;
   height: 100%;
@@ -258,7 +258,10 @@
   position: relative;
   // Override the jQuery sortable
   display: block !important;
-  font-size: 13px !important;
+  font-weight: 600;
+  font-size: 9px !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 
   span {
     line-height: 1;
@@ -487,32 +490,32 @@
 .ember-table-table-row {
   // background-color: #fff;
   // .transition(0.1s background-color linear);
-
+  color: #333;
   &.ember-table-row-style-1 {
-
+    font-weight: bold;
   }
 
   &.ember-table-row-style-2 {
-
+    font-weight: 400;
   }
 
   &.ember-table-row-style-3 {
-
+    font-weight: 300;
   }
 
   &.ember-table-row-style-4 {
-
+    font-weight: 300;
   }
 
   &.ember-table-row-style-5 {
-
+    font-weight: 300;
   }
 
   &.ember-table-row-style-6 {
-
+    font-weight: 300;
   }
 
-  &.ember-table-last-row .ember-table-cell {
+  &.ember-table-last-row .ember-table-cell-container {
     border-bottom: none !important;
   }
 }
