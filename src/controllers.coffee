@@ -138,7 +138,6 @@ Ember.Table.TableController = Ember.Controller.extend
   _width: null
   _height: null
   _contentHeaderHeight: null
-  _scrollbarSize: null
 
   _hasVerticalScrollbar: Ember.computed ->
     height = @get('_height')
@@ -155,17 +154,11 @@ Ember.Table.TableController = Ember.Controller.extend
 
   # tables-container height adjusts to the content height
   _tablesContainerHeight: Ember.computed ->
-    scrollbarSize = @get '_scrollbarSize'
     height = @get('_height')
     contentHeight = @get('_tableContentHeight') +
       @get('_headerHeight') + @get('_footerHeight')
-    # Only subtract the scrollbarSize from the contentHeight, not the height,
-    # because height is the container height of the whole table
-    if @get('_hasHorizontalScrollbar')
-      contentHeight += @get('_scrollbarSize')
     if contentHeight < height then contentHeight else height
-  .property('_height', '_tableContentHeight', '_headerHeight', '_footerHeight',
-            '_hasHorizontalScrollbar', '_scrollbarSize')
+  .property('_height', '_tableContentHeight', '_headerHeight', '_footerHeight')
 
   # actual width of the fixed columns (frozen columns)
   _fixedColumnsWidth: Ember.computed ->
@@ -174,10 +167,12 @@ Ember.Table.TableController = Ember.Controller.extend
 
   # actual width of the table columns (non-frozen columns)
   _tableColumnsWidth: Ember.computed ->
-    # Hack: We add 60px padding to the right of the table content so that we can
+    # Hack: We add 26px padding to the right of the table content so that we can
     # reorder into the last column.
-    (@_getTotalWidth @get('tableColumns')) + 60
-  .property 'tableColumns.@each.columnWidth'
+    contentWidth = (@_getTotalWidth @get('tableColumns')) + 26
+    availableWidth = @get('_width') - @get('_fixedColumnsWidth')
+    return contentWidth if contentWidth > availableWidth
+  .property 'tableColumns.@each.columnWidth', '_width', '_fixedColumnsWidth'
 
   _rowWidth: Ember.computed ->
     columnsWidth = @get '_tableColumnsWidth'
@@ -200,16 +195,15 @@ Ember.Table.TableController = Ember.Controller.extend
 
   _bodyHeight: Ember.computed ->
     bodyHeight = @get '_tablesContainerHeight'
-    bodyHeight -= @get('_scrollbarSize') if @get('_hasHorizontalScrollbar')
     bodyHeight -= @get('_headerHeight') if @get('hasHeader')
     bodyHeight -= @get('footerHeight') if @get('hasFooter')
     bodyHeight
   .property('_tablesContainerHeight', '_hasHorizontalScrollbar', '_headerHeight',
-            'footerHeight', 'hasHeader', 'hasFooter', '_scrollbarSize')
+            'footerHeight', 'hasHeader', 'hasFooter')
 
   _tableBlockWidth: Ember.computed ->
-    @get('_width') - @get('_fixedColumnsWidth') - @get('_scrollbarSize')
-  .property '_width', '_fixedColumnsWidth', '_scrollbarSize'
+    @get('_width') - @get('_fixedColumnsWidth')
+  .property '_width', '_fixedColumnsWidth'
 
   _fixedBlockWidthBinding: '_fixedColumnsWidth'
 
@@ -218,12 +212,12 @@ Ember.Table.TableController = Ember.Controller.extend
   .property 'rowHeight', 'bodyContent.length'
 
   _tableContainerWidth: Ember.computed ->
-    @get('_width') - @get('_scrollbarSize')
-  .property '_width', '_scrollbarSize'
+    @get('_width')
+  .property '_width'
 
   _scrollContainerWidth: Ember.computed ->
-    @get('_width') - @get('_fixedColumnsWidth') - @get('_scrollbarSize')
-  .property '_width', '_fixedColumnsWidth', '_scrollbarSize'
+    @get('_width') - @get('_fixedColumnsWidth')
+  .property '_width', '_fixedColumnsWidth'
 
   _numItemsShowing: Ember.computed ->
     Math.floor @get('_bodyHeight') / @get('rowHeight')

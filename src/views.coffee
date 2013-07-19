@@ -10,18 +10,43 @@ Ember.Table.TablesContainer = Ember.View.extend Ember.StyleBindingsMixin, Ember.
     @elementSizeDidChange()
     # we need to wait for the table to be fully rendered before antiscroll can
     # be used
-    Ember.run.next this, @updateAntiscroll
+    Ember.run.next this, @updateLayout
 
   onBodyContentDidChange: Ember.observer ->
     return unless @get('state') is 'inDOM'
-    Ember.run.next this, @updateAntiscroll
+    Ember.run.next this, @updateLayout
   , 'controller.bodyContent'
 
   onResizeEnd: ->
     @elementSizeDidChange()
-    Ember.run.next this, @updateAntiscroll
+    Ember.run.next this, @updateLayout
 
-  updateAntiscroll: -> this.$('.antiscroll-wrap').antiscroll()
+  updateLayout: ->
+    # Get the Antiscroll scrollbars to show up
+    this.$('.antiscroll-wrap').antiscroll()
+
+    # Expand the columns if there's extra space
+    controller = @get('controller')
+    totalWidth = @get('controller._width')
+    fixedColumnsWidth = @get('controller._fixedColumnsWidth')
+    tableColumns = @get('controller.tableColumns')
+    defaultContentWidth = controller._getTotalWidth(tableColumns)
+    availableContentWidth = totalWidth - fixedColumnsWidth
+    return if defaultContentWidth > availableContentWidth
+
+    # If the default with of the columns does not fill up the entire table
+    # recalculate their width
+    fixedAndContentWidth = fixedColumnsWidth + defaultContentWidth
+    contentPercentage = defaultContentWidth / fixedAndContentWidth
+    newWidth = contentPercentage * totalWidth
+    columnWidth = Math.floor( newWidth / tableColumns.length )
+    tableColumns.setEach 'columnWidth', columnWidth
+
+    fixedColumns = @get('controller.fixedColumns')
+    contentPercentage = fixedColumnsWidth / fixedAndContentWidth
+    newWidth = contentPercentage * totalWidth
+    fixedColumnWidth = Math.floor( newWidth / fixedColumns.length )
+    fixedColumns.setEach 'columnWidth', fixedColumnWidth
 
   elementSizeDidChange: ->
     @set 'controller._width', @$().parent().outerWidth()
@@ -235,16 +260,10 @@ Ember.Table.AddColumnButton = Ember.View.extend Ember.StyleBindingsMixin,
   styleBindings: ['height', 'width']
   classNames: 'ember-table-add-column-button'
   height: Ember.computed ->
-    # Add
+    # TODO(Louis): Why 1?
     @get('controller._headerHeight') + 1
   .property 'controller._headerHeight'
-  width: Ember.computed ->
-    26
-    # Is null, ask Peter why?
-    # @get('controller._scrollbarSize')
-    # scrollbarWidth = $.getScrollbarWidth()
-    # Minimum 13px width of plus button
-    # if scrollbarWidth < 26 then 26 else scrollbarWidth
+  width: 26
   click: (event) ->
     @get('controller').send 'addColumn'
 

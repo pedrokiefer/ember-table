@@ -3316,26 +3316,6 @@ window.treedata = {
       # "display_name": "Adjusted Value 11/1/2011 (USD)",
       "is_time_series": false,
       "template_id": "personal_value_factor"
-    },
-    {
-      "display_name": "Adjusted Value 11/30/2011 (USD)",
-      "is_time_series": false,
-      "template_id": "personal_value_factor"
-    },
-    {
-      "display_name": "Adjusted Total Return Nov. 2011 (USD)",
-      "is_time_series": false,
-      "template_id": "absolute_gain_factor"
-    },
-    {
-      "display_name": "Adjusted Total Return (%) Nov. 2011 (USD)",
-      "is_time_series": false,
-      "template_id": "percent_gain_factor"
-    },
-    {
-      "display_name": "Adjusted Performance Attribution Nov. 2011 (USD) ",
-      "is_time_series": false,
-      "template_id": "contribution_to_portfolio_factor"
     }
   ]
 }
