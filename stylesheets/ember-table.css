@@ -524,6 +524,7 @@ body {
 /* Levels */
 .ember-table-table-row {
   background-color: #fff;
+  min-width: 100%;
 }
 .ember-table-table-row.ember-table-row-style-1 {
   border-bottom: 1px dotted #dcdcdc;

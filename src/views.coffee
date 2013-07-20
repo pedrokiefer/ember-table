@@ -319,6 +319,18 @@ Ember.Table.TableContainer.extend Ember.MouseWheelHandlerMixin,
     @set 'scrollLeft', scrollLeft
     event.preventDefault()
 
+  # TODO(Peter/Louis): This should be a mixin - duplicated
+  # inside Ember.Table.BodyTableContainer
+  mouseEnter: (event) ->
+    $tablesContainer = $(event.target).parents('.ember-table-tables-container')
+    $horizontalScroll = $tablesContainer.find('.antiscroll-scrollbar-horizontal')
+    $horizontalScroll.addClass('antiscroll-scrollbar-shown')
+
+  mouseLeave: (event) ->
+    $tablesContainer = $(event.target).parents('.ember-table-tables-container')
+    $horizontalScroll = $tablesContainer.find('.antiscroll-scrollbar-horizontal')
+    $horizontalScroll.removeClass('antiscroll-scrollbar-shown')
+
 Ember.Table.ScrollContainer =
 Ember.View.extend Ember.StyleBindingsMixin, Ember.ScrollHandlerMixin,
   template: Ember.Handlebars.compile(
