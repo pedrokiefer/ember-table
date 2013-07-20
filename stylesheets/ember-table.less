@@ -22,7 +22,6 @@
   border: 1px solid #cfd1d4;
   .border-radius(2px);
   .box-sizing();
-  .box-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
   * {
     .user-select(none)
   }
@@ -463,6 +462,9 @@
 }
 
 .ember-table-scroll-container {
+  // The default line-height of 29px kills the scrollbar
+  line-height: 20px;
+
   // override inline antiscroll height
   .antiscroll-wrap {
     height: 100% !important;

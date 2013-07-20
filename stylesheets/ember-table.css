@@ -100,9 +100,6 @@ body {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .ember-table-tables-container * {
   -webkit-user-select: none;
@@ -507,6 +504,9 @@ body {
 .ember-table-body-container .antiscroll-box .antiscroll-inner {
   height: 100%;
   width: 100%;
+}
+.ember-table-scroll-container {
+  line-height: 20px;
 }
 .ember-table-scroll-container .antiscroll-wrap {
   height: 100% !important;
