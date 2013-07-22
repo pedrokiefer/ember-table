@@ -469,6 +469,9 @@
 }
 
 .ember-table-scroll-container {
+  // The default line-height of 29px kills the scrollbar
+  line-height: 20px;
+
   // override inline antiscroll height
   .antiscroll-wrap {
     height: 100% !important;
