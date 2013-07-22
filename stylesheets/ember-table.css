@@ -366,7 +366,7 @@ body {
 .ember-table-header-cell.text-align-right .ember-table-content {
   right: 0;
 }
-.ember-table-table-header-tree-cell .ember-table-content-container {
+.ember-table-table-header-tree-cell .ember-table-header-content-container {
   left: 20px;
 }
 .ember-table-table-dropdown-toggle {
