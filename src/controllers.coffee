@@ -23,6 +23,7 @@ Ember.Table.ColumnDefinition = Ember.Object.extend
   isSortable:  yes
   # text align left | center | right
   textAlign: 'text-align-right'
+  forceFillColumns: no
 
   # The view class we want to use for the header
   headerCellViewClass:  'Ember.Table.HeaderCell'

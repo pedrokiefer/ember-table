@@ -19,15 +19,44 @@ Ember.Table.TablesContainer = Ember.View.extend Ember.StyleBindingsMixin, Ember.
 
   onResizeEnd: ->
     @elementSizeDidChange()
-    Ember.run.next this, @updateLayout
-
-  updateLayout: ->
-    # Get the Antiscroll scrollbars to show up
-    this.$('.antiscroll-wrap').antiscroll()
+    Ember.run.next this, @updateAntiscroll
 
   elementSizeDidChange: ->
     @set 'controller._width', @$().parent().outerWidth()
     @set 'controller._height', @$().parent().outerHeight()
+
+  updateAntiscroll: ->
+    this.$('.antiscroll-wrap').antiscroll()
+
+  updateLayout: ->
+    @updateAntiscroll()
+    @forceFillColumns() if @get('controller.forceFillColumns')
+
+  forceFillColumns: ->
+    # Expand the columns if there's extra space
+    controller = @get('controller')
+    totalWidth = @get('controller._width')
+    fixedColumnsWidth = @get('controller._fixedColumnsWidth')
+    tableColumns = @get('controller.tableColumns')
+    defaultContentWidth = controller._getTotalWidth(tableColumns)
+    availableContentWidth = totalWidth - fixedColumnsWidth
+    return if defaultContentWidth > availableContentWidth
+
+    # TODO(Louis): This is terribly janky and I need to re-write this
+    # If the default with of the columns does not fill up the entire table
+    # recalculate their width
+    fixedAndContentWidth = fixedColumnsWidth + defaultContentWidth
+    contentPercentage = defaultContentWidth / fixedAndContentWidth
+    newWidth = contentPercentage * totalWidth
+    columnWidth = Math.floor( newWidth / tableColumns.length )
+    tableColumns.setEach 'columnWidth', columnWidth
+
+    fixedColumns = @get('controller.fixedColumns')
+    contentPercentage = fixedColumnsWidth / fixedAndContentWidth
+    newWidth = contentPercentage * totalWidth
+    fixedColumnWidth = Math.floor( newWidth / fixedColumns.length )
+    fixedColumns.setEach 'columnWidth', fixedColumnWidth
+
 
 Ember.Table.TableContainer = Ember.View.extend Ember.StyleBindingsMixin,
   classNames:     ['ember-table-table-container']
