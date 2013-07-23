@@ -7,7 +7,9 @@
 
   /* Table Structures */
 
-  &.ember-table-tables-container {
+  // TODO(Louis): This is a hack for now, it should be:
+  // &.ember-table-tables-container {
+  .ember-table-tables-container {
     background-color: transparent;
     border: none;
     color: #77777a;
@@ -82,6 +84,7 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     background: transparent;
+    background-color: transparent;
 
     span {
       line-height: 1;
@@ -152,6 +155,11 @@
       border-top: 1px dotted #bbb;
       border-bottom: none;
     }
+  }
+
+  .ember-table-fixed-table-container.ember-table-header-container,
+  .ember-table-fixed-table-container.ember-table-footer-container {
+    background-color: transparent;
   }
 
   /* Add Column Button */
