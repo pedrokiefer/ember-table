@@ -5,6 +5,18 @@
 /* Ember Table Structure
 -------------------------------------------------- */
 
+/* Util classes */
+
+.text-align-left {
+  text-align: left;
+}
+.text-align-right {
+  text-align: right;
+}
+.text-align-center {
+  text-align: center;
+}
+
 /* Table Structures */
 
 .ember-table-tables-container {
@@ -155,21 +167,39 @@
     // Note the -1 is because we use box sizing and the row has a bottom border
     line-height: @table-row-height - 1;
     .box-sizing();
+
+    &:hover {
+      cursor: default;
+    }
   }
 
   .ember-table-content {
+    display: block;
     padding: 0 5px;
     .box-sizing();
   }
 }
 
-.ember-table-body-container .ember-table-cell,
-.ember-table-footer-container .ember-table-cell {
+.ember-table-cell-container {
+  float: left;
+  height: 100%;
+  width: 100%;
+  .box-sizing();
+}
+
+.ember-table-body-container .ember-table-content,
+.ember-table-footer-container .ember-table-content {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   height: 100%;
   border-right: 0;
+}
+
+.ember-table-left-table-block .ember-table-cell {
+  // This is not scalable for multiple frozen columns
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .ember-table-left-table-block .ember-table-cell {
@@ -343,7 +373,7 @@
   .box-sizing();
 
   &:hover {
-    cursor: pointer;
+      cursor: pointer !important;
   }
 }
 
@@ -527,16 +557,4 @@
 
 .ember-table-body-container .ember-table-table-row.active {
   background-color: rgba(0, 82, 196, 0.1);
-}
-
-/* Util classes */
-
-.text-align-left {
-  text-align: left;
-}
-.text-align-right {
-  text-align: right;
-}
-.text-align-center {
-  text-align: center;
 }
