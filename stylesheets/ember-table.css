@@ -7,7 +7,7 @@ html,
 body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 13px;
-  background: #fff;
+  background: #eee;
   height: 100%;
   width: 100%;
 }
@@ -79,6 +79,16 @@ body {
 }
 /* Ember Table Structure
 -------------------------------------------------- */
+/* Util classes */
+.text-align-left {
+  text-align: left;
+}
+.text-align-right {
+  text-align: right;
+}
+.text-align-center {
+  text-align: center;
+}
 /* Table Structures */
 .ember-table-tables-container {
   height: 100%;
@@ -238,19 +248,36 @@ body {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+.ember-table-cell .ember-table-content:hover,
+.ember-table-cell .ember-table-toggle-span:hover {
+  cursor: default;
+}
 .ember-table-cell .ember-table-content {
+  display: block;
   padding: 0 5px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.ember-table-body-container .ember-table-cell,
-.ember-table-footer-container .ember-table-cell {
+.ember-table-cell-container {
+  float: left;
+  height: 100%;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.ember-table-body-container .ember-table-content,
+.ember-table-footer-container .ember-table-content {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   height: 100%;
   border-right: 0;
+}
+.ember-table-left-table-block .ember-table-cell {
+  margin-left: 0;
+  margin-right: 0;
 }
 .ember-table-left-table-block .ember-table-cell {
   border-right: 1px solid #dcdcdc !important;
@@ -399,7 +426,7 @@ body {
   box-sizing: border-box;
 }
 .ember-table-toggle-span:hover {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 .ember-table-toggle-icon {
   display: none;
@@ -551,14 +578,4 @@ body {
 }
 .ember-table-body-container .ember-table-table-row.active {
   background-color: rgba(0, 82, 196, 0.1);
-}
-/* Util classes */
-.text-align-left {
-  text-align: left;
-}
-.text-align-right {
-  text-align: right;
-}
-.text-align-center {
-  text-align: center;
 }
