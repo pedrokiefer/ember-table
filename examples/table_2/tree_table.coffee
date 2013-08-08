@@ -196,7 +196,7 @@ App.TreeTableExample.HeaderTreeCell = Ember.Table.HeaderCell.extend
 # Controller
 ################################################################################
 App.TreeTableExample.TableController =
-Ember.Table.TableController.extend App.TreeTableExample.TreeDataAdapter,
+Ember.Table.TableComponent.extend App.TreeTableExample.TreeDataAdapter,
   # overridding default properties
   numFixedColumns: 1
   isCollapsed: no

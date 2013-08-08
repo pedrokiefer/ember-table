@@ -115,7 +115,7 @@ module.exports = (grunt) ->
     ember_templates:
       options:
         templateName: (sourceFile) -> sourceFile.replace(/src\/templates\//, '')
-      'build/templates/templates.js': ["src/templates/*.hbs"]
+      'build/templates/templates.js': ["src/templates/**/*.hbs"]
 
     ###
       Find all the <whatever>_test.js files in the test folder.

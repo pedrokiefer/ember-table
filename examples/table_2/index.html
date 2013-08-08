@@ -18,8 +18,8 @@
 
     <script type="text/x-handlebars" data-template-name="application">
       <div class="presentation-container">
-        {{view Ember.Table.TablesContainer
-          controllerBinding="tableController"
+        {{view App.TreeTableExample.TableController
+          dataBinding="data"
           selectionBinding="tableController.selection"
         }}
       </div>
