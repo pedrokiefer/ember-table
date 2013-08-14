@@ -13,19 +13,26 @@ Ember.Table.TablesContainer = Ember.View.extend Ember.StyleBindingsMixin, Ember.
     Ember.run.next this, @updateLayout
 
   onBodyContentDidChange: Ember.observer ->
-    return unless @get('state') is 'inDOM'
     Ember.run.next this, @updateLayout
   , 'controller.bodyContent'
 
   onResizeEnd: ->
-    @elementSizeDidChange()
+    # we need to put this on the run loop, because resize event came from
+    # window. Otherwise, we get this warning when used in tests. You have
+    # turned on testing mode, which disabled the run-loop's autorun. You
+    # will need to wrap any code with asynchronous side-effects in an
+    # Ember.run
+    Ember.run this, @elementSizeDidChange
+    # we want to upadate antiscroll after resize is done
     Ember.run.next this, @updateAntiscroll
 
   elementSizeDidChange: ->
+    return unless @get('state') is 'inDOM'
     @set 'controller._width', @$().parent().outerWidth()
     @set 'controller._height', @$().parent().outerHeight()
 
   updateAntiscroll: ->
+    return unless @get('state') is 'inDOM'
     this.$('.antiscroll-wrap').antiscroll()
 
   updateLayout: ->

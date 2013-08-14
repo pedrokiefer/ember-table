@@ -29,3 +29,6 @@ Ember.ScrollHandlerMixin = Ember.Mixin.create
   willDestroyElement: ->
     @$(@get('scrollElementSelector'))?.unbind 'scroll'
     @_super()
+
+Ember.TouchHandlerMixin = Ember.Mixin.create
+
