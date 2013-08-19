@@ -378,6 +378,7 @@ body {
   position: absolute;
   bottom: 2px;
   font-weight: bold;
+  width: 100%;
 }
 .ember-table-header-cell .ember-table-toggle {
   position: relative;
