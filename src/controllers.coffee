@@ -65,7 +65,7 @@ Ember.Table.RowArrayProxy = Ember.ArrayProxy.extend
     return row if row
     tableRowClass = @get 'tableRowClass'
     item  = @get('content').objectAt(idx)
-    row   = tableRowClass.create content: item
+    row   = tableRowClass.create content: item, target: @get 'target'
     @get('rowContent')[idx] = row
     row
 
@@ -103,6 +103,7 @@ Ember.Table.TableController = Ember.Controller.extend
   # Array of Ember.Table.Row
   bodyContent: Ember.computed ->
     Ember.Table.RowArrayProxy.create
+      target: this
       tableRowClass: Ember.Table.Row
       content: @get('content')
   .property 'content'

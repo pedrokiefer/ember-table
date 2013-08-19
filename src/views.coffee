@@ -8,13 +8,10 @@ Ember.Table.TablesContainer = Ember.View.extend Ember.StyleBindingsMixin, Ember.
     @_super()
     @set 'controller._tableScrollTop', 0
     @elementSizeDidChange()
-    # we need to wait for the table to be fully rendered before antiscroll can
-    # be used
-    Ember.run.next this, @updateLayout
 
-  onBodyContentDidChange: Ember.observer ->
-    Ember.run.next this, @updateLayout
-  , 'controller.bodyContent'
+  onBodyContentLengthDidChange: Ember.observer ->
+    Ember.run.next this, -> Ember.run.once this, @updateLayout
+  , 'controller.bodyContent.length'
 
   onResizeEnd: ->
     # we need to put this on the run loop, because resize event came from
@@ -23,20 +20,19 @@ Ember.Table.TablesContainer = Ember.View.extend Ember.StyleBindingsMixin, Ember.
     # will need to wrap any code with asynchronous side-effects in an
     # Ember.run
     Ember.run this, @elementSizeDidChange
-    # we want to upadate antiscroll after resize is done
-    Ember.run.next this, @updateAntiscroll
 
   elementSizeDidChange: ->
     return unless @get('state') is 'inDOM'
     @set 'controller._width', @$().parent().outerWidth()
     @set 'controller._height', @$().parent().outerHeight()
-
-  updateAntiscroll: ->
-    return unless @get('state') is 'inDOM'
-    this.$('.antiscroll-wrap').antiscroll()
+    # we need to wait for the table to be fully rendered before antiscroll can
+    # be used
+    Ember.run.next this, @updateLayout
 
   updateLayout: ->
-    @updateAntiscroll()
+    # updating antiscroll
+    return unless @get('state') is 'inDOM'
+    this.$('.antiscroll-wrap').antiscroll()
     @forceFillColumns() if @get('controller.forceFillColumns')
 
   forceFillColumns: ->
