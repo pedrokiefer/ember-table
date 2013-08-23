@@ -23,7 +23,7 @@ Ember.Table.ColumnDefinition = Ember.Object.extend
   isSortable:  yes
   # text align left | center | right
   textAlign: 'text-align-right'
-  forceFillColumns: no
+  canAutoResize: yes
 
   # The view class we want to use for the header
   headerCellViewClass:  'Ember.Table.HeaderCell'
@@ -86,6 +86,7 @@ Ember.Table.TableController = Ember.Controller.extend
   footerHeight: 30
   hasHeader: yes
   hasFooter: yes
+  forceFillColumns: no
 
   # specify the view class to use for rendering the table rows
   # TODO(Peter): This probably should go in the view...
@@ -173,7 +174,7 @@ Ember.Table.TableController = Ember.Controller.extend
     # reorder into the last column.
     contentWidth = (@_getTotalWidth @get('tableColumns')) + 26
     availableWidth = @get('_width') - @get('_fixedColumnsWidth')
-    return contentWidth if contentWidth > availableWidth
+    if contentWidth > availableWidth then contentWidth else availableWidth
   .property 'tableColumns.@each.columnWidth', '_width', '_fixedColumnsWidth'
 
   _rowWidth: Ember.computed ->
