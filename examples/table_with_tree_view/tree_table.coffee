@@ -18,20 +18,6 @@ App.TreeTableExample = Ember.Namespace.create()
 App.TreeTableExample.TreeDataAdapter = Ember.Mixin.create
   data: null
 
-  # OPTIMIZATION HACK
-  bodyContent: Ember.computed ->
-    rows = @get('rows')
-    return Ember.A() unless rows
-    rows = rows.slice(1, rows.get('length'))
-    rows.filterProperty('isShowing')
-  .property 'rows'
-
-  footerContent: Ember.computed ->
-    rows = @get('rows')
-    return Ember.A() unless rows
-    rows.slice(0, 1)
-  .property 'rows'
-
   columns: Ember.computed ->
     data = @get 'data'
     return unless data
@@ -55,7 +41,10 @@ App.TreeTableExample.TreeDataAdapter = Ember.Mixin.create
     Ember.Table.ColumnDefinition.create
       headerCellName: name
       columnWidth: 400
+      maxWidth: 700
       isTreeColumn: yes
+      isSortable: no
+      textAlign: 'text-align-left'
       headerCellViewClass:  'App.TreeTableExample.HeaderTreeCell'
       tableCellViewClass:   'App.TreeTableExample.TreeCell'
       contentPath: 'group_value'
@@ -70,8 +59,26 @@ App.TreeTableExample.TreeDataAdapter = Ember.Mixin.create
   rows: Ember.computed ->
     root = @get 'root'
     return Ember.A() unless root
-    @flattenTree null, root, Ember.A()
+    rows = @flattenTree null, root, Ember.A()
+    @computeStyles null, root
+    maxGroupingLevel = Math.max.apply rows.getEach('groupingLevel')
+    rows.forEach (row) -> row.computeRowStyle(maxGroupingLevel)
+    rows
   .property 'root'
+
+  # OPTIMIZATION HACK
+  bodyContent: Ember.computed ->
+    rows = @get('rows')
+    return Ember.A() unless rows
+    rows = rows.slice(1, rows.get('length'))
+    rows.filterProperty('isShowing')
+  .property 'rows'
+
+  footerContent: Ember.computed ->
+    rows = @get('rows')
+    return Ember.A() unless rows
+    rows.slice(0, 1)
+  .property 'rows'
 
   orderBy: (item1, item2) ->
     sortColumn = @get 'sortColumn'
@@ -83,84 +90,120 @@ App.TreeTableExample.TreeDataAdapter = Ember.Mixin.create
     if sortAscending then result else -result
 
   createTree: (parent, node) ->
-    row = App.TreeTableExample.TreeTableRow.create content: node
+    row = App.TreeTableExample.TreeTableRow.create()
     children = (node.children || []).map (child) =>
       @createTree row, child
-    children.sort jQuery.proxy(@orderBy, this)
-    row.set 'parent', parent
-    row.set 'children', children
+    # TODO(Peter): Hack... only collapse table if it should collapseByDefault
+    # and it is not the root. Currently the total row is the root, and if it
+    # is collapse, it causes nothing to show in the table and there is no way
+    # to get expand it.
+    row.setProperties
+      isRoot:     not parent
+      isLeaf:     Ember.isEmpty(children)
+      content:    node
+      parent:     parent
+      children:   children
+      groupName:  node.group_name
+      isCollapsed:no
     row
 
   flattenTree: (parent, node, rows) ->
     rows.pushObject node
-
     (node.children || []).forEach (child) =>
       @flattenTree node, child, rows
     rows
 
+  computeStyles: (parent, node) ->
+    node.computeStyles parent
+    node.get('children').forEach (child) =>
+      @computeStyles node, child
+
 App.TreeTableExample.TreeTableRow = Ember.Table.Row.extend
+  content:  null
   children: null
   parent:   null
+  isRoot:   no
+  isLeaf:   no
   isCollapsed: no
+  isShowing: yes
   indentationSpacing: 20
+  groupName: null
 
-  isLeaf: Ember.computed ->
-    @get('children.length') is 0
-  .property 'children'
+  # This may look ugly, but this is necessary. By doing the styles computation
+  # imperatively we made the initial table load 10-100x faster (certain cases)
+  computeStyles: (parent) ->
+    groupingLevel = 0
+    indentation   = 0
+    isShowing     = yes
+    if parent
+      isShowing = parent.get('isShowing') and not parent.get('isCollapsed')
+      pGroupingLevel = parent.get 'groupingLevel'
+      groupingLevel  = pGroupingLevel
+      groupingLevel  += 1 if parent.get('groupName') isnt @get('groupName')
+      indentType = if groupingLevel is pGroupingLevel then 'half' else 'full'
+      spacing    = @get 'indentationSpacing'
+      if not parent.get('isRoot')
+        indentation = parent.get('indentation')
+        indentation += (if indentType is 'half' then spacing / 2 else spacing)
+    @set 'groupingLevel', groupingLevel
+    @set 'indentation', indentation
+    @set 'isShowing', isShowing
 
-  isShowing: Ember.computed ->
-    parent = @get 'parent'
-    return yes unless parent
-    @get('parent.isShowing') and not @get('parent.isCollapsed')
-  .property 'parent.isShowing', 'parent.isCollapsed'
-
-  indentation: Ember.computed ->
-    parent      = @get 'parent'
-    spacing     = @get 'indentationSpacing'
-    return 0 unless parent and spacing
-    parent.get('indentation') + spacing
-  .property 'indentationSpacing', 'parent.indentation'
+  computeRowStyle: (maxLevels) ->
+    level = @getFormattingLevel @get('groupingLevel'), maxLevels
+    @set 'rowStyle', "ember-table-row-style-#{level}"
 
   recursiveCollapse: (isCollapsed) ->
     @set 'isCollapsed', isCollapsed
     @get('children').forEach (child) ->
       child.recursiveCollapse isCollapsed
 
+  getFormattingLevel: (level, maxLevels) ->
+    switch maxLevels
+      when 1 then return 5
+      when 2
+        return 2 if level is 1
+        return 5
+      when 3
+        return 1 if level is 1
+        return 3 if level is 2
+        return 5
+      when 4
+        return 1 if level is 1
+        return 2 if level is 2
+        return 4 if level is 4
+        return 5
+      when 5
+        return level
+      else
+        return 5 if level is maxLevels
+        return Math.min(level, 4)
+
 ################################################################################
 # Views
 ################################################################################
 App.TreeTableExample.TreeCell = Ember.Table.TableCell.extend
   templateName: 'table-tree-cell'
+  classNames:   'ember-table-table-tree-cell'
   styleBindings: ['indentation:padding-left']
-
-  indentation: Ember.computed ->
-    indentation = @get 'row.indentation'
-    if indentation then indentation - 15 else 0
-  .property 'row.indentation'
+  indentation:  Ember.computed.alias 'row.indentation'
 
 App.TreeTableExample.HeaderTreeCell = Ember.Table.HeaderCell.extend
   templateName: 'table-header-tree-cell'
-
-App.TreeTableExample.TablesContainer =
-Ember.Table.TablesContainer.extend Ember.Table.RowMultiSelectionMixin,
-  leftArrowPressed: (event) ->
-    sel = @get 'selection'
-    sel.forEach (row) -> row.set 'isCollapsed', yes
-
-  rightArrowPressed: (event) ->
-    sel = @get 'selection'
-    sel.forEach (row) -> row.set 'isCollapsed', no
+  classNames:   'ember-table-table-header-tree-cell'
 
 ################################################################################
 # Controller
 ################################################################################
-App.TreeTableExample.TableController =
-Ember.Table.TableController.extend App.TreeTableExample.TreeDataAdapter,
+App.TreeTableExample.TableComponent =
+Ember.Table.EmberTableComponent.extend App.TreeTableExample.TreeDataAdapter,
   # overridding default properties
   numFixedColumns: 1
   isCollapsed: no
+  isHeaderHeightResizable: yes
   rowHeight: 30
   hasHeader: yes
+  minHeaderHeight: 30
   hasFooter: yes
 
   # custom properties

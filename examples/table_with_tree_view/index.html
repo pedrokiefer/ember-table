@@ -6,14 +6,11 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-
     <link rel="stylesheet" href="../../stylesheets/bootstrap.css">
     <link rel="stylesheet" href="../../stylesheets/font-awesome.css">
 
     <!-- Less CSS -->
-    <link rel="stylesheet/less" type="text/css" href="../../stylesheets/setup.less">
-    <link rel="stylesheet/less" type="text/css" href="../../stylesheets/ember-table.less">
-    <script src="../../lib/less-1.3.0.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../../stylesheets/ember-table.css">
 
     <script src="../../lib/modernizr-2.6.1.min.js"></script>
   </head>
@@ -21,39 +18,50 @@
 
     <script type="text/x-handlebars" data-template-name="application">
       <div class="presentation-container">
-        {{view App.TreeTableExample.TablesContainer
-          controllerBinding="tableController"
-          selectionBinding="tableController.selection"
-        }}
+        {{view App.TreeTableExample.TableComponent dataBinding="data"}}
+      </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="header-cell">
+      <div class="ember-table-content-container" {{action sortByColumn view.content}}>
+        <span class="ember-table-content">
+          {{view.content.headerCellName}}
+        </span>
       </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="table-tree-cell">
-      <span {{bindAttr class="view.row.isLeaf::toggle
-        view.row.isCollapsed:expand:collapse"}}
-        {{action toggleCollapse view.row}}>
-        <i class="toggle-icon icon-chevron-down"></i>
+      <span {{bindAttr class=":ember-table-toggle-span view.row.isLeaf::ember-table-toggle
+          view.row.isCollapsed:ember-table-expand:ember-table-collapse"}}
+          {{action toggleCollapse view.row}}>
+        <i class="icon-caret-down ember-table-toggle-icon"></i>
       </span>
-      {{view.cellContent}}
+      <span class="ember-table-content">
+        {{view.cellContent}}
+      </span>
     </script>
 
     <script type="text/x-handlebars" data-template-name="table-header-tree-cell">
-      <span {{bindAttr class=":toggle controller.isCollapsed:expand:collapse"}}
-          {{action toggleTableCollapse target="controller"}}>
-        <i class="icon-chevron-down icon-white"></i>
+      <span {{bindAttr class=":ember-table-toggle-span view.row.isLeaf::ember-table-toggle
+          view.row.isCollapsed:ember-table-expand:ember-table-collapse"}}
+          {{action toggleCollapse view.row}}>
+        <i class="icon-caret-down ember-table-toggle-icon"></i>
       </span>
-      <span class='column-title' {{action sortByColumn view.column}}>
-        {{view.column.headerCellName}}
-      </span>
+      <div class="ember-table-content-container" {{action sortByColumn view.column}}>
+        <span class="ember-table-content">
+          {{view.column.headerCellName}}
+        </span>
+      </div>
     </script>
 
-    <script src="../../lib/jquery-1.9.1.min.js"></script>
-    <script src="../../lib/jquery-ui-1.10.1.custom.min.js"></script>
+    <script src="../../lib/jquery-1.10.2.min.js"></script>
+    <script src="../../lib/jquery-ui-1.10.2.custom.js"></script>
     <script src="../../lib/jquery.mousewheel.js"></script>
     <script src="../../lib/bootstrap.js"></script>
     <script src="../../lib/handlebars.js"></script>
     <script src="../../lib/ember.js"></script>
     <script src="../../lib/ember-table.js"></script>
+    <script src="../../lib/antiscroll.js"></script>
     <script src="data.js"></script>
     <script src="app.js"></script>
     <script src="tree_table.js"></script>
