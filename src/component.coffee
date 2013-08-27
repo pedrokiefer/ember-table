@@ -57,9 +57,9 @@ Ember.Component.extend Ember.StyleBindingsMixin, Ember.ResizeHandler,
     # updating antiscroll
     return unless @get('state') is 'inDOM'
     this.$('.antiscroll-wrap').antiscroll()
-    @forceFillColumns() if @get('forceFillColumns')
+    @doForceFillColumns() if @get('forceFillColumns')
 
-  forceFillColumns: ->
+  doForceFillColumns: ->
     # Expand the columns if there's extra space
     totalWidth = @get '_width'
     fixedColumnsWidth = @get '_fixedColumnsWidth'

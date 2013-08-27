@@ -152,7 +152,7 @@ Ember.Table.HeaderRow = Ember.View.extend Ember.ScrollHandlerMixin,
     newIndex = ui.item.index()
     view     = Ember.View.views[ui.item.attr('id')]
     column   = view.get 'column'
-    @get('controller').send 'onColumnSort', column, newIndex
+    @get('controller').onColumnSort column, newIndex
     @set 'controller._isShowingSortableIndicator', no
 
 Ember.Table.HeaderCell = Ember.View.extend Ember.StyleBindingsMixin,
@@ -210,8 +210,7 @@ Ember.Table.AddColumnButton = Ember.View.extend Ember.StyleBindingsMixin,
     @get('controller._headerHeight') + 1
   .property 'controller._headerHeight'
   width: 26
-  click: (event) ->
-    @get('controller').send 'addColumn'
+  click: -> @get('controller').addColumn()
 
 Ember.Table.ColumnSortableIndicator =
 Ember.View.extend Ember.StyleBindingsMixin,
